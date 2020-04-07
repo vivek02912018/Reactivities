@@ -36,7 +36,18 @@ namespace API
             {
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
-            services.AddControllers();
+            services.AddCors(opt=>
+            {
+                opt.AddPolicy("CorsPolicy",policy=>{
+                 policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+                 //Below code also works, make sure there is no '/' in the url given
+                // policy.WithOrigins("http://localhost:3000")                              
+                            //    .AllowAnyHeader()
+                             //   .AllowAnyMethod();
+                });
+            });
+           services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+           // services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,10 +63,11 @@ namespace API
             app.UseRouting();
 
             app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
+            app.UseCors("CorsPolicy");
+           // app.UseMvc();
+           app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+              endpoints.MapControllers();
             });
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
@@ -66,6 +78,8 @@ namespace API
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
+            
+           
         }
-    }
+    } 
 }
