@@ -6,7 +6,8 @@ import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+   
+    <App /> {/*  this renders the app.tsx file */}
   </React.StrictMode>,
   document.getElementById('root')
 );

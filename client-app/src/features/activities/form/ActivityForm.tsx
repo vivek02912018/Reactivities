@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from "react";
+import React, { useState, FormEvent ,SyntheticEvent} from "react";
 import { Segment, Form, Button } from "semantic-ui-react";
 import { IActivity } from "../../../app/models/activity";
 import {v4 as uuid} from 'uuid';
@@ -7,12 +7,14 @@ interface IProps {
   activity: IActivity;
   createActivity:(activity:IActivity)=>void;
   editActivity:(activity:IActivity)=>void;
+  submitting: boolean;
 }
 const ActivityForm: React.FC<IProps> = ({
   setEditMode,
   activity: initialFormState,
   createActivity,
-  editActivity
+  editActivity,
+  submitting
 }) => {
   //means assigning value of 'activity' to initialFormState
   const initializeForm = () => {
@@ -74,7 +76,7 @@ const ActivityForm: React.FC<IProps> = ({
         <Form.Input
           onChange={handleInputChange}
           name="date"
-          type="time-local"
+          type="datetime-local"
           placeholder="Date"
           value={activity.date}
         />
@@ -90,7 +92,7 @@ const ActivityForm: React.FC<IProps> = ({
           placeholder="Venue"
           value={activity.venue}
         />
-        <Button floated="right"  positive type="submit" content="Submit" />
+        <Button loading={submitting} floated="right"  positive type="submit" content="Submit" />
         <Button
           onClick={() => setEditMode(false)}
           floated="right"
